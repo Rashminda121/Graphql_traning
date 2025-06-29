@@ -1,0 +1,23 @@
+mutation{
+  createProduct(input:{
+    name:"Widget 2",
+    description:"description for product 2",
+    price: 12.99,
+    soldout:false,
+    stores:[
+      {
+        store: "store 1"
+      },
+      {
+        store: "store 2"
+      },
+      
+    ]
+  }){
+    price
+    name
+    description
+    id
+  }
+}
+
