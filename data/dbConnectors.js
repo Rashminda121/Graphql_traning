@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { Sequelize, DataTypes } from "sequelize";
+import _ from "lodash";
+import casual from "casual";
 
 async function connectToDatabase() {
   try {
@@ -34,4 +37,34 @@ const widgetSchema = new mongoose.Schema({
 
 const Widgets = mongoose.model("Widgets", widgetSchema);
 
-export { connectToDatabase, disconnectFromDatabase, Widgets };
+const sequelize = new Sequelize("sqlite::memory:");
+
+const Categories = sequelize.define("categories", {
+  category: DataTypes.STRING,
+  description: DataTypes.STRING,
+});
+
+async function syncAndSeedCategories() {
+  try {
+    await sequelize.sync({ force: true });
+    console.log("SQLite database synced");
+
+    //seeding categories
+    // await Promise.all(
+    //   _.times(5, () => {
+    //     return Categories.create({
+    //       category: casual.word,
+    //       description: casual.sentence,
+    //     });
+    //   })
+    // );
+
+    // console.log("Categories seeded");
+  } catch (error) {
+    console.log("Error syncing and seeding categories:", error);
+  }
+}
+
+syncAndSeedCategories();
+
+export { connectToDatabase, disconnectFromDatabase, Widgets, Categories };
